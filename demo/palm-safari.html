@@ -1,0 +1,141 @@
+<div id="palm-safari-demo" class="viz-dotted-background">
+  <style>
+    #palm-safari-demo { padding:20px 0; color-scheme:light dark; }
+    #palm-safari-demo .phone { --paper:light-dark(#f8f6ef,#252e29); --ink:light-dark(#233a30,#f2f2e6); --muted-ink:light-dark(#637365,#b9c7b9); --chip:light-dark(#e9eee5,#3a463d); --leaf:light-dark(#345b43,#c7ddb2); --on-leaf:light-dark(#fffef7,#223625); max-width:410px; margin:auto; border-radius:28px; overflow:hidden; background:var(--paper); color:var(--ink); font:14px/1.5 system-ui,'Yu Gothic',sans-serif; box-shadow:0 16px 48px #0002; }
+    #palm-safari-demo .top { padding:20px 22px 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    #palm-safari-demo .brand { font-size:18px; font-weight:600; letter-spacing:.04em; }
+    #palm-safari-demo .eyebrow { font-size:11px; letter-spacing:.16em; color:var(--muted-ink); }
+    #palm-safari-demo .badge { background:var(--chip); color:var(--ink); padding:6px 10px; border-radius:99px; font-size:12px; white-space:nowrap; }
+    #palm-safari-demo .stage { position:relative; height:340px; background:light-dark(#dce5d9,#303d35); touch-action:pan-y; }
+    #palm-safari-demo canvas { display:block; width:100%; height:100%; touch-action:none; }
+    #palm-safari-demo .scene-label { position:absolute; top:12px; left:16px; padding:5px 10px; border-radius:99px; background:var(--paper); color:var(--muted-ink); font-size:11px; pointer-events:none; }
+    #palm-safari-demo .scene-hint { position:absolute; bottom:12px; left:0; right:0; text-align:center; pointer-events:none; font-size:12px; color:var(--ink); }
+    #palm-safari-demo .loading { position:absolute; inset:70px 20px; display:grid; place-content:center; text-align:center; color:var(--ink); }
+    #palm-safari-demo .loading[hidden] { display:none; }
+    #palm-safari-demo .sheet { padding:18px 22px 22px; }
+    #palm-safari-demo .heading { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+    #palm-safari-demo h2 { margin:0; font-size:22px; font-weight:600; }
+    #palm-safari-demo .subtitle { color:var(--muted-ink); font-size:12px; margin:4px 0 16px; }
+    #palm-safari-demo .choices { display:flex; gap:8px; margin-bottom:14px; }
+    #palm-safari-demo button { font:inherit; border:0; border-radius:14px; padding:11px 12px; min-height:44px; background:var(--chip); color:var(--ink); flex:1; }
+    #palm-safari-demo button[aria-pressed=true] { background:var(--leaf); color:var(--on-leaf); }
+    #palm-safari-demo .sliders { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:4px 0 14px; }
+    #palm-safari-demo label { display:block; font-size:12px; }
+    #palm-safari-demo label span { float:right; font-variant-numeric:tabular-nums; }
+    #palm-safari-demo input { width:100%; margin:8px 0 0; accent-color:var(--leaf); min-height:24px; }
+    #palm-safari-demo .note { color:var(--muted-ink); font-size:11px; text-align:center; margin:0; }
+    #palm-safari-demo .motion { margin-bottom:12px; }
+    @media(max-width:360px) { #palm-safari-demo .top { padding:16px; } #palm-safari-demo .sheet { padding:16px; } #palm-safari-demo .stage { height:300px; } }
+  </style>
+  <div class="phone">
+    <div class="top"><div><div class="eyebrow">PALM SAFARI</div><div class="brand">てのひらサファリ</div></div><span class="badge">3Dプレビュー</span></div>
+    <div class="stage">
+      <canvas aria-label="恐竜やキツネの立体モデル。下の向きスライダーでも回転できます。" role="img"></canvas>
+      <span class="scene-label">デモ · 仮の背景</span>
+      <div class="loading" role="status">3Dモデルを読み込んでいます…</div>
+      <div class="scene-hint">ドラッグして、ぐるっと見てみよう</div>
+    </div>
+    <div class="sheet">
+      <div class="heading"><h2 data-name>ティラノ</h2><span class="badge" data-status aria-live="polite">のんびり待機中</span></div>
+      <p class="subtitle" data-subtitle>ちいさな恐竜、大きな好奇心。</p>
+      <div class="choices" aria-label="モデルを選ぶ">
+        <button type="button" class="cursor-interaction" data-model="dino" aria-pressed="true">恐竜 · ティラノ</button>
+        <button type="button" class="cursor-interaction" data-model="fox" aria-pressed="false">動物 · キツネ</button>
+      </div>
+      <div class="choices motion" aria-label="動きを選ぶ">
+        <button type="button" class="cursor-interaction" data-motion="idle" aria-pressed="true">のんびり</button>
+        <button type="button" class="cursor-interaction" data-motion="step" aria-pressed="false">足ぶみ</button>
+        <button type="button" class="cursor-interaction" data-motion="pause" aria-pressed="false">停止</button>
+      </div>
+      <div class="sliders">
+        <label>大きさ <span data-size-label>1.0×</span><input aria-label="大きさ" data-size type="range" min="0.5" max="1.5" step="0.1" value="1"></label>
+        <label>向き <span data-angle-label>−30°</span><input aria-label="向き" data-angle type="range" min="-180" max="180" step="1" value="-30"></label>
+      </div>
+      <p class="note">Android版では、実際のカメラ映像に重ねて表示。</p>
+    </div>
+  </div>
+  <script type="application/json" data-catalog>[{"id":"dino","name":"ティラノ","subtitle":"ちいさな恐竜、大きな好奇心。","groups":[{"id":"body","pivot":[0,0,0],"parts":[{"p":[0,0.76,0],"s":[0.34,0.47,0.42],"c":"#56866B","shape":"sphere","r":0},{"p":[0,0.79,0.29],"s":[0.25,0.34,0.19],"c":"#D6DCB1","shape":"sphere","r":0},{"p":[-0.31,0.91,0.28],"s":[0.085,0.19,0.085],"c":"#56866B","shape":"sphere","r":-24},{"p":[0.31,0.91,0.28],"s":[0.085,0.19,0.085],"c":"#56866B","shape":"sphere","r":24},{"p":[-0.31,0.78,0.36],"s":[0.08,0.06,0.11],"c":"#D6DCB1","shape":"sphere","r":0},{"p":[0.31,0.78,0.36],"s":[0.08,0.06,0.11],"c":"#D6DCB1","shape":"sphere","r":0}]},{"id":"head","pivot":[0,1.12,0.17],"parts":[{"p":[0,0.22,0.1],"s":[0.33,0.32,0.4],"c":"#679A79","shape":"sphere","r":0},{"p":[0,0.13,0.39],"s":[0.3,0.19,0.28],"c":"#679A79","shape":"sphere","r":0},{"p":[0,-0.025,0.35],"s":[0.27,0.065,0.29],"c":"#D6DCB1","shape":"sphere","r":0},{"p":[-0.288,0.3,0.27],"s":[0.065,0.08,0.075],"c":"#FFF8E9","shape":"sphere","r":0},{"p":[0.288,0.3,0.27],"s":[0.065,0.08,0.075],"c":"#FFF8E9","shape":"sphere","r":0},{"p":[-0.332,0.3,0.29],"s":[0.025,0.045,0.045],"c":"#203C35","shape":"sphere","r":0},{"p":[0.332,0.3,0.29],"s":[0.025,0.045,0.045],"c":"#203C35","shape":"sphere","r":0},{"p":[-0.14,0.21,0.619],"s":[0.026,0.025,0.02],"c":"#203C35","shape":"sphere","r":0},{"p":[0.14,0.21,0.619],"s":[0.026,0.025,0.02],"c":"#203C35","shape":"sphere","r":0}]},{"id":"tail","pivot":[0,0.64,-0.3],"parts":[{"p":[0,0.02,-0.34],"s":[0.23,0.19,0.46],"c":"#56866B","shape":"sphere","r":0},{"p":[0,0.09,-0.72],"s":[0.12,0.11,0.3],"c":"#679A79","shape":"sphere","r":0}]},{"id":"legL","pivot":[-0.22,0.39,0.02],"parts":[{"p":[0,0,0],"s":[0.18,0.27,0.2],"c":"#47765D","shape":"sphere","r":0},{"p":[0,-0.26,0.11],"s":[0.12,0.13,0.15],"c":"#56866B","shape":"sphere","r":0},{"p":[0,-0.32,0.23],"s":[0.16,0.07,0.24],"c":"#56866B","shape":"sphere","r":0}]},{"id":"legR","pivot":[0.22,0.39,0.02],"parts":[{"p":[0,0,0],"s":[0.18,0.27,0.2],"c":"#47765D","shape":"sphere","r":0},{"p":[0,-0.26,0.11],"s":[0.12,0.13,0.15],"c":"#56866B","shape":"sphere","r":0},{"p":[0,-0.32,0.23],"s":[0.16,0.07,0.24],"c":"#56866B","shape":"sphere","r":0}]}]},{"id":"fox","name":"キツネ","subtitle":"ふさふさのしっぽを、すぐそばに。","groups":[{"id":"body","pivot":[0,0,0],"parts":[{"p":[0,0.5,0],"s":[0.26,0.29,0.46],"c":"#C97739","shape":"sphere","r":0},{"p":[0,0.52,0.32],"s":[0.22,0.26,0.16],"c":"#F3E4C9","shape":"sphere","r":0}]},{"id":"head","pivot":[0,0.76,0.32],"parts":[{"p":[0,0.13,0.09],"s":[0.29,0.29,0.29],"c":"#D98A45","shape":"sphere","r":0},{"p":[-0.17,0.42,0.06],"s":[0.12,0.25,0.12],"c":"#D98A45","shape":"cone","r":13},{"p":[0.17,0.42,0.06],"s":[0.12,0.25,0.12],"c":"#D98A45","shape":"cone","r":-13},{"p":[-0.17,0.43,0.12],"s":[0.065,0.17,0.05],"c":"#513C35","shape":"cone","r":13},{"p":[0.17,0.43,0.12],"s":[0.065,0.17,0.05],"c":"#513C35","shape":"cone","r":-13},{"p":[-0.13,-0.01,0.26],"s":[0.16,0.11,0.2],"c":"#F3E4C9","shape":"sphere","r":0},{"p":[0.13,-0.01,0.26],"s":[0.16,0.11,0.2],"c":"#F3E4C9","shape":"sphere","r":0},{"p":[0,0.045,0.42],"s":[0.065,0.055,0.05],"c":"#303934","shape":"sphere","r":0},{"p":[-0.21,0.18,0.28],"s":[0.034,0.05,0.035],"c":"#303934","shape":"sphere","r":0},{"p":[0.21,0.18,0.28],"s":[0.034,0.05,0.035],"c":"#303934","shape":"sphere","r":0}]},{"id":"tail","pivot":[0,0.42,-0.32],"parts":[{"p":[0,0.06,-0.36],"s":[0.21,0.23,0.48],"c":"#C97739","shape":"sphere","r":0},{"p":[0,0.08,-0.72],"s":[0.16,0.17,0.26],"c":"#F3E4C9","shape":"sphere","r":0}]},{"id":"legL","pivot":[-0.17,0.25,0.27],"parts":[{"p":[0,-0.06,0],"s":[0.08,0.19,0.09],"c":"#513C35","shape":"sphere","r":0},{"p":[0,-0.2,0.03],"s":[0.08,0.05,0.12],"c":"#513C35","shape":"sphere","r":0}]},{"id":"legR","pivot":[0.17,0.25,0.27],"parts":[{"p":[0,-0.06,0],"s":[0.08,0.19,0.09],"c":"#513C35","shape":"sphere","r":0},{"p":[0,-0.2,0.03],"s":[0.08,0.05,0.12],"c":"#513C35","shape":"sphere","r":0}]},{"id":"backL","pivot":[-0.17,0.25,-0.27],"parts":[{"p":[0,-0.06,0],"s":[0.08,0.19,0.09],"c":"#513C35","shape":"sphere","r":0},{"p":[0,-0.2,0.03],"s":[0.08,0.05,0.12],"c":"#513C35","shape":"sphere","r":0}]},{"id":"backR","pivot":[0.17,0.25,-0.27],"parts":[{"p":[0,-0.06,0],"s":[0.08,0.19,0.09],"c":"#513C35","shape":"sphere","r":0},{"p":[0,-0.2,0.03],"s":[0.08,0.05,0.12],"c":"#513C35","shape":"sphere","r":0}]}]}]</script>
+  <script type="module">
+    const root = document.getElementById('palm-safari-demo');
+    const q = (s) => root.querySelector(s);
+    const catalog = JSON.parse(q('[data-catalog]').textContent);
+    let state = {model:'dino',motion:matchMedia('(prefers-reduced-motion: reduce)').matches?'pause':'idle',size:1,angle:-30};
+    let groups=[], creature, renderer, scene, camera, time=0, lastTime=0, alive=true;
+    const clean = (input) => ({model:input?.model==='fox'?'fox':'dino',motion:['idle','step','pause'].includes(input?.motion)?input.motion:state.motion,size:Math.max(.5,Math.min(1.5,Number(input?.size)||1)),angle:Math.max(-180,Math.min(180,Number(input?.angle)||0))});
+    const saved=window.openai?.widgetState?.modelContent;
+    if(saved) state=clean(saved);
+    function save(){window.openai?.setWidgetState?.({modelContent:state,privateContent:null})?.catch(()=>{});}
+    function sync(){
+      const data=catalog.find(m=>m.id===state.model);
+      q('[data-name]').textContent=data.name; q('[data-subtitle]').textContent=data.subtitle;
+      q('[data-status]').textContent={idle:'のんびり待機中',step:'足ぶみ中',pause:'停止中'}[state.motion];
+      root.querySelectorAll('[data-model]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.model===state.model)));
+      root.querySelectorAll('[data-motion]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.motion===state.motion)));
+      q('[data-size]').value=state.size; q('[data-angle]').value=state.angle;
+      q('[data-size-label]').textContent=state.size.toFixed(1)+'×'; q('[data-angle-label]').textContent=Math.round(state.angle)+'°';
+    }
+    sync();
+    try {
+      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js');
+      renderer = new THREE.WebGLRenderer({canvas:q('canvas'),antialias:true,alpha:true});
+      renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.shadowMap.enabled=true;
+      renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace;
+      scene=new THREE.Scene(); camera=new THREE.PerspectiveCamera(35,1,.1,40);
+      camera.position.set(2.6,2.1,4.6); camera.lookAt(0,.64,0);
+      scene.add(new THREE.HemisphereLight(0xfff7e7,0x708573,2.5));
+      const key=new THREE.DirectionalLight(0xfff6df,3); key.position.set(-3,6,4); key.castShadow=true;
+      key.shadow.mapSize.set(1024,1024); key.shadow.camera.left=-3; key.shadow.camera.right=3;
+      key.shadow.camera.top=3; key.shadow.camera.bottom=-3; key.shadow.normalBias=.025; scene.add(key);
+      const dark=matchMedia('(prefers-color-scheme: dark)');
+      const floorMaterial=new THREE.MeshStandardMaterial({color:dark.matches?0x53634e:0xd0dcc6,roughness:1});
+      const floor=new THREE.Mesh(new THREE.CylinderGeometry(1.6,1.6,.12,64),floorMaterial); floor.position.y=-.065; floor.receiveShadow=true; scene.add(floor);
+      const ring=new THREE.Mesh(new THREE.RingGeometry(1.43,1.438,80),new THREE.MeshBasicMaterial({color:dark.matches?0x7c9171:0x9eb392,side:THREE.DoubleSide})); ring.rotation.x=-Math.PI/2; ring.position.y=.002; scene.add(ring);
+      const sphere=new THREE.SphereGeometry(1,14,10); const cone=new THREE.ConeGeometry(1,2,5);
+      const materials=new Map();
+      const getMaterial=c=>{if(!materials.has(c))materials.set(c,new THREE.MeshStandardMaterial({color:c,roughness:.85,flatShading:true})); return materials.get(c);};
+      function build(){
+        if(creature) scene.remove(creature);
+        creature=new THREE.Group(); groups=[];
+        catalog.find(m=>m.id===state.model).groups.forEach(g=>{
+          const node=new THREE.Group(); node.position.fromArray(g.pivot); node.userData={id:g.id,pivot:g.pivot};
+          g.parts.forEach(p=>{const mesh=new THREE.Mesh(p.shape==='cone'?cone:sphere,getMaterial(p.c));mesh.position.fromArray(p.p);mesh.scale.fromArray(p.s);mesh.rotation.z=p.r*Math.PI/180;mesh.castShadow=true;mesh.receiveShadow=true;node.add(mesh);});
+          creature.add(node); groups.push(node);
+        }); scene.add(creature);
+      }
+      build(); q('.loading').hidden=true; root.dataset.ready='true';
+      const resize=()=>{const s=q('.stage'); renderer.setSize(s.clientWidth,s.clientHeight,false);camera.aspect=s.clientWidth/s.clientHeight;camera.updateProjectionMatrix();};
+      const ro=new ResizeObserver(resize);ro.observe(q('.stage'));resize();
+      dark.addEventListener('change',()=>{floorMaterial.color.set(dark.matches?0x53634e:0xd0dcc6);ring.material.color.set(dark.matches?0x7c9171:0x9eb392);});
+      root.querySelectorAll('[data-model]').forEach(b=>b.addEventListener('click',()=>{state.model=b.dataset.model;build();sync();save();}));
+      root.querySelectorAll('[data-motion]').forEach(b=>b.addEventListener('click',()=>{state.motion=b.dataset.motion;sync();save();}));
+      q('[data-size]').addEventListener('input',e=>{state.size=Number(e.target.value);sync();save();});
+      q('[data-angle]').addEventListener('input',e=>{state.angle=Number(e.target.value);sync();save();});
+      let drag=null; const canvas=q('canvas');
+      canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,angle:state.angle};canvas.setPointerCapture(e.pointerId);});
+      canvas.addEventListener('pointermove',e=>{if(drag){state.angle=((drag.angle+(e.clientX-drag.x)*.65+540)%360)-180;sync();}});
+      const release=()=>{if(drag){drag=null;save();}};canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',release);
+      window.addEventListener('openai:set_globals',e=>{const value=e.detail?.globals?.widgetState?.modelContent;if(value){state=clean(value);build();sync();}});
+      let poseMotion=state.motion==='pause'?'idle':state.motion;
+      function draw(now){
+        if(!root.isConnected){alive=false;ro.disconnect();renderer.dispose();sphere.dispose();cone.dispose();materials.forEach(m=>m.dispose());return;}
+        const dt=Math.min((now-lastTime)/1000,.05);lastTime=now;
+        if(!document.hidden && state.motion!=='pause'){time+=dt;poseMotion=state.motion;}
+        const step=poseMotion==='step';
+        creature.scale.setScalar(state.size*.85);creature.rotation.y=state.angle*Math.PI/180;
+        creature.position.y=step?Math.abs(Math.sin(time*6))*.025:0;
+        groups.forEach(g=>{
+          const id=g.userData.id;g.rotation.set(0,0,0);g.position.fromArray(g.userData.pivot);
+          if(id==='tail')g.rotation.y=Math.sin(time*2.3)*.18;
+          if(id==='head')g.rotation.x=Math.sin(time*1.7)*.035;
+          if(id==='body')g.scale.y=1+Math.sin(time*2)*.012;
+          if(step && ['legL','legR','backL','backR'].includes(id)){
+            const sign=['legL','backR'].includes(id)?1:-1;
+            const stride=Math.sin(time*6)*sign;g.position.y+=Math.max(0,stride)*.065;g.position.z+=stride*.06;
+          }
+        });
+        renderer.render(scene,camera); if(alive) requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    } catch(error){q('.loading').textContent='3D表示を読み込めませんでした。ネット接続とWebGL対応をご確認ください。';q('.loading').setAttribute('role','alert');console.error(error);}
+  </script>
+</div>
